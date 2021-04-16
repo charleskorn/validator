@@ -151,7 +151,7 @@ type FieldError interface {
 
 	// Type returns the Field's reflect Type
 	//
-	// // eg. time.Time's type is time.Time
+	// eg. time.Time's type is time.Time
 	Type() reflect.Type
 
 	// returns the FieldError's translated error
@@ -160,6 +160,9 @@ type FieldError interface {
 	// NOTE: if no registered translator can be found it returns the same as
 	// calling fe.Error()
 	Translate(ut ut.Translator) string
+
+	// Error returns the FieldError's message
+	Error() string
 }
 
 // compile time interface checks
@@ -270,8 +273,8 @@ func (fe *fieldError) Error() string {
 // Translate returns the FieldError's translated error
 // from the provided 'ut.Translator' and registered 'TranslationFunc'
 //
-// NOTE: is not registered translation can be found it returns the same
-// as calling fe.Error()
+// NOTE: if no registered translation can be found, it returns the original
+// untranslated error message.
 func (fe *fieldError) Translate(ut ut.Translator) string {
 
 	m, ok := fe.v.transTagFunc[ut]
